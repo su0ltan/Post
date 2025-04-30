@@ -49,19 +49,21 @@
 This solution follows the **Clean Architecture** pattern, split into four main layers:
 
 1. **Domain**  
-   - Entities, value objects, domain exceptions, interfaces (e.g. `IPostRepository`)
+   - Domain Entities
 2. **Application**  
-   - Business logic, commands/queries (CQRS), DTOs, validators
+   - Business logic, Services, validators,interfaces (e.g. `IPostRepository`)
 3. **Infrastructure**  
    - EF Core DbContext, repository implementations, external services
 4. **Presentation (MVC)**  
    - ASP.NET Core MVC controllers, views, view-models
-
+5. **Serivce(API)**
+   - ASP.NET Core Web API for handlign actions
+  
 ---
 
 ## Prerequisites
 
-- [.NET 7.0 SDK](https://dotnet.microsoft.com/download)  
+- [.NET 6.0 SDK](https://dotnet.microsoft.com/download)  
 - [SQL Server](https://www.microsoft.com/sql-server) (or any provider configured in `appsettings.json`)  
 - Optional: [Visual Studio 2022](https://visualstudio.microsoft.com/) or [VS Code](https://code.visualstudio.com/)
 
