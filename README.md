@@ -74,5 +74,5 @@ This solution follows the **Clean Architecture** pattern, split into four main l
 ### Clone the Repo
 
 ```bash
-git clone https://github.com/your-username/Post.git
+git clone https://github.com/su0ltan/Post.git
 cd Post
