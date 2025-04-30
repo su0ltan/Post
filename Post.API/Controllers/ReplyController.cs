@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Post.Application.Interfaces;
 using Post.Application.Logging;
 using Post.Common.DTOs.Reply;
@@ -11,6 +12,7 @@ namespace Post.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class ReplyController : ControllerBase
     {
         private readonly IAppLogger<ReplyDto> _logger;
@@ -34,7 +36,7 @@ namespace Post.API.Controllers
             return Ok(ApiResponse<AddReplyDto>.SuccessResponse(dto, "Reply added successfully"));
         }
 
-        [HttpGet("GetUserReplies")]
+        [HttpGet("GetUserReplies/{userId}")]
         public async Task<IActionResult> GetUserReplies(Guid userId)
         {
             var replies = await _replyService.GetUserRepliesAsync(userId);
@@ -44,14 +46,14 @@ namespace Post.API.Controllers
             ));
         }
 
-     /*   [HttpGet("GetRepliesByPost")]
+        [HttpGet("GetRepliesByPost")]
         public async Task<IActionResult> GetRepliesByPost(Guid postId)
         {
-            var replies = await _replyService.GetRepliesByPostAsync(postId);
+            var replies = await _replyService.GetPostRepliesAsync(postId);
             return Ok(ApiResponse<List<ReplyDto>>.SuccessResponse(
                 replies,
                 $"Replies for post {postId} retrieved successfully"
             ));
-        }*/
+        }
     }
 }

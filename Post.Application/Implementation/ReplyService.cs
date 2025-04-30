@@ -73,13 +73,30 @@ namespace Post.Application.Implementation
             return true;
         }
 
+        public async Task<List<ReplyDto>> GetPostRepliesAsync(Guid postId)
+        {
+            if (isEmpty(postId))
+                throw new BadRequestException("Post Id is null");
+
+
+            var replies = await _uow.ReplyRepository.GetPostReplies(postId);
+
+            var dtoList = replies.Select(ReplyMapper.Map).ToList();
+
+            if (!dtoList.Any())
+            {
+                _logger.LogInformation("No replies found for Post {PostId}", postId);
+                dtoList = new List<ReplyDto>();
+            }
+              
+            return dtoList;
+
+        }
+
         public async Task<List<ReplyDto>> GetUserRepliesAsync(Guid userId)
         {
-            if (userId == Guid.Empty)
-            {
-                _logger.LogWarning("Parameter {Param} was Guid.Empty", nameof(userId));
-                throw new BadRequestException($"{nameof(userId)} cannot be empty");
-            }
+            if (isEmpty(userId))
+                throw new BadRequestException("User Id is null");
 
             _logger.LogInformation("Retrieving replies for user {UserId}", userId);
 
@@ -92,6 +109,8 @@ namespace Post.Application.Implementation
 
             return dtoList;
         }
+
+     
 
         public async Task<bool> RemoveAsync(Guid replyId)
         {
@@ -119,6 +138,16 @@ namespace Post.Application.Implementation
         {
             throw new NotImplementedException();
        }
+        private bool isEmpty(Guid id)
+        {
+            if (id == Guid.Empty)
+            {
+                _logger.LogWarning("Parameter {Param} was Guid.Empty", nameof(id));
+                return true;
+            }
+
+            return false;
+        }
     }
     
 }

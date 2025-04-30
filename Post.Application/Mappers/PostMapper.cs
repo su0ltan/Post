@@ -6,7 +6,7 @@ namespace Post.Application.Mappers
 {
     public static class PostMapper
     {
-        public static PostDto Map(Post1 post)
+        public static PostDto Map(Domain.Entities.Post post)
         {
             return new PostDto
             {
@@ -18,9 +18,9 @@ namespace Post.Application.Mappers
             };
         }
 
-        public static Post1 Map(this PostDto postDto)
+        public static Domain.Entities.Post Map(this PostDto postDto)
         {
-            return new Post1
+            return new Domain.Entities.Post
             {
                 Id = postDto.Id,
                 UserId = postDto.UserId,
@@ -30,9 +30,9 @@ namespace Post.Application.Mappers
             };
         }
 
-        public static Post1 Map(this AddPostDto postDto)
+        public static Domain.Entities.Post Map(this AddPostDto postDto)
         {
-            return new Post1
+            return new Domain.Entities.Post
             {
                 UserId = postDto.UserId,
                 topic = postDto.topic,

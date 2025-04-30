@@ -7,7 +7,6 @@ using System.Text.Json;
 
 namespace Post.API.Middlewares
 {
-
     public class ExceptionMiddleware
     {
         private readonly RequestDelegate _next;
@@ -60,7 +59,7 @@ namespace Post.API.Middlewares
                 default:
                     statusCode = HttpStatusCode.InternalServerError;
                     response = ApiResponse<object>.ErrorResponse(
-                        message: "An unexpected error occurred."
+                        message: ex.InnerException?.Message.ToString() ?? ex.Message.ToString()
                     );
                     _logger.LogError("Unexpected error: {ExceptionMessage}", ex, ex.Message); // ✅ Works now
                     break;

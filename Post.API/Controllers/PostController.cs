@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Post.Application.Interfaces;
 using Post.Application.Logging;
 using Post.Common.DTOs.Post;
@@ -8,7 +9,8 @@ namespace Post.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class PostController : ControllerBase
+    [Authorize]
+    public class PostController : BaseApiController
     {
 
         private readonly IAppLogger<PostDto> _logger;
@@ -29,11 +31,18 @@ namespace Post.API.Controllers
         }
 
 
-        [HttpGet("GetPosts")]
-        public async Task<IActionResult> GetPosts(Guid userId)
+        [HttpGet("GetUserPosts/{userId}")]
+        public async Task<IActionResult> GetUserPosts(Guid userId)
         {
             var result = await _postService.GetUserPostsAsync(userId);
             return Ok(ApiResponse<List<PostDto>>.SuccessResponse(result, "Posts Retrieved Successfully"));
+        }
+
+        [HttpGet("GetLatestPosts")]
+        public async Task<IActionResult> GetLatestPosts([FromQuery] QueryParameters parameters)
+        {
+            var dtos = await _postService.GetLatestPosts(parameters);
+            return Ok(ApiResponse<List<PostDto>>.SuccessResponse(dtos, "Success retrieving data"));
         }
 
 

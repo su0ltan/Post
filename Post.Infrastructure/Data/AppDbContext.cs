@@ -14,13 +14,13 @@ namespace Post.Infrastructure.Data
             : base(options) { }
 
         public DbSet<Reply> Replies { get; set; }
-        public DbSet<Post1> Posts { get; set; }
+        public DbSet<Domain.Entities.Post> Posts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<Post1>()
+            builder.Entity<Domain.Entities.Post>()
                 .HasOne(p => p.User)
                 .WithMany(u => u.Posts)
                 .HasForeignKey(p => p.UserId)

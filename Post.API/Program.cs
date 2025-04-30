@@ -1,10 +1,14 @@
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using Post.API.Configuration;
 using Post.API.Middlewares;
 using Post.Application;
 using Post.Domain.Entities;
 using Post.Infrastructure;
 using Post.Infrastructure.Data;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +27,12 @@ builder.Services.AddIdentity<User, IdentityRole<Guid>>()
               .AddDefaultTokenProviders();
 
 
+builder.Services
+       .AddJwtAuthentication(builder.Configuration);
+builder.Services.AddSwaggerAuthentication(builder.Configuration);
+builder.Services.AddAuthorization();
+builder.Services.AddControllers();
+
 var app = builder.Build();
 app.UseMiddleware<ExceptionMiddleware>();
 // Configure the HTTP request pipeline.
@@ -32,9 +42,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+app.UseAuthentication();
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+app.UseSwaggerAuthentication();
 
 app.MapControllers();
 

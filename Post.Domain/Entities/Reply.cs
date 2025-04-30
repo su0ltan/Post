@@ -12,7 +12,7 @@ namespace Post.Domain.Entities
         [ForeignKey(nameof(Post))]
         public Guid PostId { get; set; }
 
-        public virtual Post1 Post { get; set; }
+        public virtual Post Post { get; set; }
 
         [ForeignKey(nameof(User))]
         public Guid UserId { get; set; }

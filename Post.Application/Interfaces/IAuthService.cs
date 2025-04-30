@@ -1,4 +1,5 @@
 ﻿using Post.Common.DTOs.Auth;
+using Post.Common.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace Post.Application.Interfaces
     public interface IAuthService
     {
 
-        Task<bool> Login(LoginDto loginDto);
+        Task<TokenResponseDto> Login(LoginDto loginDto);
         Task<bool> Register(RegisterDto registeration);
         Task<bool> Logout();
 

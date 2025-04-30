@@ -13,6 +13,7 @@ using Post.Application.Repositories;
 using Post.Application.Validation;
 using Post.Application.Validation.PostValidation;
 using Post.Common.DTOs.Post;
+using Post.Common.Models;
 using Post.Domain.Entities;
 
 namespace Post.Application.Implementation
@@ -20,10 +21,10 @@ namespace Post.Application.Implementation
     public class PostService : IPostService
     {
         private  readonly IUnitOfWork _unitOfWork;
-        private readonly IAppLogger<Post1> _logger;
+        private readonly IAppLogger<Domain.Entities.Post> _logger;
         private readonly UserManager<User> _userManager;
 
-        public PostService(IUnitOfWork unitOfWork, IAppLogger<Post1> logger, UserManager<User> userManager)
+        public PostService(IUnitOfWork unitOfWork, IAppLogger<Domain.Entities.Post> logger, UserManager<User> userManager)
         {
             _unitOfWork = unitOfWork;
             _logger = logger;
@@ -66,17 +67,39 @@ namespace Post.Application.Implementation
             }
 
             var entity = PostMapper.Map(dto);
-            await _unitOfWork.Repository<Post1>().AddAsync(entity);
+            await _unitOfWork.Repository<Domain.Entities.Post>().AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task<List<PostDto>> GetLatestPosts(QueryParameters parameters)
+        {
+
+            _logger.LogInformation("Retrieving lataest posts");
+
+
+            // retrieving
+            var posts = await _unitOfWork.PostRepository.GetLatestPosts(parameters);
+
+           
+            if(posts == null || !posts.Any())
+            {
+                _logger.LogWarning("No Posts Founded");
+                return new List<PostDto>();
+            }
+
+            // Mapping the domain entity
+            var dtoLists = posts.Select(PostMapper.Map).ToList();
+
+            return dtoLists;
         }
 
         public async Task<List<PostDto>> GetUserPostsAsync(Guid userId)
         {
             if (userId == Guid.Empty)
             {
-                _logger.LogWarning("Parameter {Param} was Guid.Empty", nameof(userId));
+                _logger.LogWarning("Parameter {1} was Guid.Empty", nameof(userId));
                 throw new BadRequestException($"{nameof(userId)} cannot be empty");
             }
 
@@ -91,7 +114,7 @@ namespace Post.Application.Implementation
             _logger.LogInformation("Retrieving posts for user {UserId}", userId);
 
             var posts = await _unitOfWork.PostRepository.GetUserPosts(userId)
-                             ?? new List<Post1>();
+                             ?? new List<Domain.Entities.Post>();
 
             var dtoList = posts.Select(PostMapper.Map).ToList();
             if (!dtoList.Any())
@@ -102,11 +125,6 @@ namespace Post.Application.Implementation
 
 
         public Task<bool> RemoveAsync(Guid postId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> Update(PostDto post)
         {
             throw new NotImplementedException();
         }

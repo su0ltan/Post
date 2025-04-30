@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Post.Domain.Shared;
 
 namespace Post.Domain.Entities
 {
-    public class Post1 : BaseEntity
+    public class Post : BaseEntity
     {
         [Required]
         public string topic { get; set; }

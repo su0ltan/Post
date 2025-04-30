@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Post.Common.DTOs.Post;
+using Post.Common.Models;
 
 namespace Post.Application.Interfaces
 {
@@ -13,5 +14,6 @@ namespace Post.Application.Interfaces
         Task<List<PostDto>> GetUserPostsAsync(Guid userId);
         Task<bool> RemoveAsync(Guid postId);
         Task<bool> UpdateAsync(PostDto dto);
+        Task<List<PostDto>> GetLatestPosts(QueryParameters parameters);
     }
 }

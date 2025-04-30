@@ -10,11 +10,11 @@ namespace Post.Application.Repositories
     public interface IUnitOfWork : IDisposable
     {
         IGenricRepository<T> Repository<T>() where T : class;
-        Task<int> Save(CancellationToken cancellationToken);
 
         IPostRepository PostRepository { get; }
         IReplyRepository ReplyRepository { get; }
 
+        Task<int> Save(CancellationToken cancellationToken);
         Task<int> SaveChangesAsync();
         Task<int> SaveAndRemoveCache(CancellationToken cancellationToken, params string[] cacheKeys);
         Task Rollback();

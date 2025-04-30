@@ -29,10 +29,10 @@ namespace Post.API.Controllers
         public async Task<IActionResult> Login(LoginDto login)
         {
             var result = await _authService.Login(login);
-            if (!result)
+            if (result == null)
                 return BadRequest(ApiResponse<object>.ErrorResponse("User Login failed"));
 
-            return Ok(ApiResponse<object>.SuccessResponse(null, "User Login successfully"));
+            return Ok(ApiResponse<object>.SuccessResponse(result, "User Login successfully"));
         }
 
         [HttpPost("logout")]
